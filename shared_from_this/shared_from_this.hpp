@@ -16,7 +16,7 @@ class SharedFromThis
     {
         //delay evaluation until instantiation
         constexpr bool operator_new_is_not_used = []{return false;}();
-        static_assert(operator_new_is_not_used,"Class that inherits from HasSharedThis cannot be instantiated with operator new.");
+        static_assert(operator_new_is_not_used,"Class that inherits from SharedFromThis cannot be instantiated with operator new.");
     }
 
     template<typename... Args> static std::shared_ptr<T> create(Args&&... args)
@@ -25,7 +25,7 @@ class SharedFromThis
         constexpr bool is_constructor_is_callable = std::is_constructible<T,Args&&...>::value;
         static_assert(
             !is_constructor_is_callable,
-            "If the class inherits from HasSharedThis,the class of constructor must be protected."
+            "If the class inherits from SharedFromThis,the class of constructor must be protected."
         );
 
         auto shared_this = std::make_shared<CreateHelper>(std::forward<Args>(args)...);
